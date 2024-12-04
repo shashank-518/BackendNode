@@ -5,7 +5,7 @@ const PlacesRoute = require("./Routes/places-routes")
 
 const app = express()
 
-app.use(PlacesRoute)
+app.use('/api/places' , PlacesRoute)
 
 app.listen(5000)
 
