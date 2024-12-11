@@ -45,7 +45,13 @@ router.get("/:pid" , (req,res,next)=>{
 
     const place = DUMMY_VALUES.find(p => id === p.id);
 
-    console.log(place)
+
+    if(!place){
+        const error = new Error('Could not find the place with this placeId')
+        error.code = 404
+        return next(error)
+    }
+
 
     res.json({place})
 
@@ -55,6 +61,13 @@ router.get("/user/:uid" , (req,res,next)=>{
     const uid = req.params.uid;
 
     const User = DUMMY_VALUES.find(u=> uid === u.creator)
+
+    if(!User){
+        const error = new Error('Could not find the place with this UserId')
+        error.code = 404
+        return next(error)
+    }
+
 
     res.json({User}) //{User: User} Both are same
 
