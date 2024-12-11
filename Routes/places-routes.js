@@ -1,4 +1,5 @@
 const exprees = require("express")
+const HttpError = require("../models/htttp-error")
 
 const router = exprees.Router()
 
@@ -47,9 +48,7 @@ router.get("/:pid" , (req,res,next)=>{
 
 
     if(!place){
-        const error = new Error('Could not find the place with this placeId')
-        error.code = 404
-        return next(error)
+        return next(new HttpError('Could not find the place with this placeId' , 404))
     }
 
 
@@ -63,9 +62,7 @@ router.get("/user/:uid" , (req,res,next)=>{
     const User = DUMMY_VALUES.find(u=> uid === u.creator)
 
     if(!User){
-        const error = new Error('Could not find the place with this UserId')
-        error.code = 404
-        return next(error)
+        return next(new HttpError('Could not find the place with this UserId' , 404))
     }
 
 
