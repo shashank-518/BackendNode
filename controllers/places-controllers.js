@@ -1,4 +1,7 @@
 const HttpError = require("../models/htttp-error")
+
+
+
 const DUMMY_VALUES = [
     {
       id: "p1",
@@ -35,6 +38,7 @@ const DUMMY_VALUES = [
 
 
 
+
 const getPlacebyId = (req,res,next)=>{
     const id = req.params.pid;
 
@@ -64,5 +68,24 @@ const getPlacebyUserId = (req,res,next)=>{
 
 }
 
+const createPlaces = (req,res,next)=>{
+    const {title , address , descrption , coordinates ,creator} = req.body
+
+    const createdplace = {
+      title,
+      address,
+      descrption,
+      location: coordinates,
+      creator
+    }
+
+
+    DUMMY_VALUES.push(createPlaces)
+
+    res.status(201).json({place : createdplace})
+
+}
+
 exports.getPlacebyId = getPlacebyId;
 exports.getPlacebyUserId = getPlacebyUserId;
+exports.createPlaces = createPlaces;

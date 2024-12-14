@@ -1,6 +1,7 @@
 const exprees = require("express")
 const placescontrollers = require("../controllers/places-controllers")
 
+
 const router = exprees.Router()
 
 router.get("/" , (req,res,next)=>{
@@ -11,6 +12,8 @@ router.get("/" , (req,res,next)=>{
 router.get("/:pid" , placescontrollers.getPlacebyId)
 
 router.get("/user/:uid" , placescontrollers.getPlacebyUserId)
+
+router.post("/" , placescontrollers.createPlaces )
 
 
 module.exports = router

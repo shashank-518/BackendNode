@@ -3,9 +3,11 @@ const bodyParser = require("body-parser")
 
 const PlacesRoute = require("./Routes/places-routes")
 
+
 const app = express()
 
 app.use('/api/places' , PlacesRoute)
+app.use(bodyParser.json())
 
 app.use((error,req,res,next)=>{
 
