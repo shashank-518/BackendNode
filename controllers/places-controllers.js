@@ -91,6 +91,31 @@ const createPlaces = (req,res,next)=>{
 
 }
 
+
+const updatePlace = (req,res,next)=>{
+
+  const {title , descrption} = req.body;
+  const uid = req.params.uid;
+
+  const updatedPlace = {...DUMMY_VALUES.find(p => p.id === uid)}
+  console.log(updatedPlace)
+  const placeIndex = DUMMY_VALUES.findIndex(p=>p.id === uid)
+
+  updatedPlace.title = title;
+  updatedPlace.descrption = descrption;
+
+  DUMMY_VALUES[placeIndex] = updatedPlace;
+  
+  res.status(200).json({message:"Successfull"})
+  
+}
+
+const deletePlace = (req,res,next)=>{
+
+}
+
 exports.getPlacebyId = getPlacebyId;
 exports.getPlacebyUserId = getPlacebyUserId;
 exports.createPlaces = createPlaces;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;
