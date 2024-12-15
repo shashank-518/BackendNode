@@ -6,8 +6,11 @@ const PlacesRoute = require("./Routes/places-routes")
 
 const app = express()
 
-app.use('/api/places' , PlacesRoute)
+
 app.use(bodyParser.json())
+
+app.use('/api/places' , PlacesRoute)
+
 
 app.use((error,req,res,next)=>{
 
