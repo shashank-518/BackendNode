@@ -11,7 +11,7 @@ router.get("/" , (req,res,next)=>{
 
 router.get("/:pid" , placescontrollers.getPlacebyId)
 
-router.get("/user/:uid" , placescontrollers.getPlacebyUserId)
+router.get("/user/:uid" , placescontrollers.getPlacesbyUserId)
 
 router.post("/" , placescontrollers.createPlaces )
 
