@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 
-const DUMMY_VALUES = [
+let DUMMY_VALUES = [
     {
       id: "p1",
       title: "Burj Khalifa",
@@ -111,6 +111,10 @@ const updatePlace = (req,res,next)=>{
 }
 
 const deletePlace = (req,res,next)=>{
+  const placeId = req.params.uid;
+  DUMMY_VALUES = DUMMY_VALUES.filter(p => p.id !== placeId)
+
+  res.status(200).json({message : "Deleted Place"})
 
 }
 
