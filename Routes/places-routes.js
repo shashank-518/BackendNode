@@ -23,7 +23,10 @@ router.post(
   placescontrollers.createPlaces
 );
 
-router.patch("/:uid", placescontrollers.updatePlace);
+router.patch("/:uid", [
+    check('title').not().isEmpty(),
+    check('descrption').isLength({min:5})
+] ,  placescontrollers.updatePlace);
 
 router.delete("/:uid", placescontrollers.deletePlace);
 

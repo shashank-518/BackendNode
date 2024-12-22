@@ -77,8 +77,6 @@ const createPlaces = (req,res,next)=>{
       throw new HttpError("Please Try again Pasiing the correct Input" , 422)
     }
 
-  
-
     const {title,address,descrption,coordinate,creator} = req.body;
 
     console.log(coordinate)
@@ -102,6 +100,14 @@ const createPlaces = (req,res,next)=>{
 
 
 const updatePlace = (req,res,next)=>{
+
+
+  const err = validationResult(req);
+
+  if(!err.isEmpty()){
+    console.log(err);
+    throw new HttpError("Error Occured while updating Place", 422);
+  }
 
   const {title , descrption} = req.body;
   const uid = req.params.uid;
