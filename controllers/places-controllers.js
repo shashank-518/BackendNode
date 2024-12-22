@@ -1,6 +1,6 @@
 const HttpError = require("../models/htttp-error")
 const { v4: uuidv4 } = require('uuid');
-
+const {validationResult} = require("express-validator")
 
 
 let DUMMY_VALUES = [
@@ -70,6 +70,15 @@ const getPlacesbyUserId = (req,res,next)=>{
 }
 
 const createPlaces = (req,res,next)=>{
+
+    const error = validationResult(req);
+    if(!error.isEmpty()){
+      console.log(error)
+      throw new HttpError("Please Try again Pasiing the correct Input" , 422)
+    }
+
+  
+
     const {title,address,descrption,coordinate,creator} = req.body;
 
     console.log(coordinate)
