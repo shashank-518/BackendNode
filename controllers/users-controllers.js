@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const HttpError = require('../models/htttp-error');
-
+const {validationResult} = require("express-validator")
 
 
 const DUMMY_VALUES = [
@@ -17,6 +17,12 @@ const getusers = (req,res,next)=>{
 }
 
 const signup = (req,res,next)=>{
+    const error = validationResult(req);
+    if(!error.isEmpty()){
+      console.log(error)
+      throw new HttpError("Please Try again Pasiing the correct Input" , 422)
+    }
+
 
     const {name , email , password} = req.body;
 

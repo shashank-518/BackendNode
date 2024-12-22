@@ -1,14 +1,21 @@
-const exprees = require("express")
-const userscontrollers = require("../controllers/users-controllers")
+const exprees = require("express");
+const { check } = require("express-validator");
+const userscontrollers = require("../controllers/users-controllers");
 
+const router = exprees.Router();
 
-const router = exprees.Router()
+router.get("/", userscontrollers.getusers);
 
-router.get("/" , userscontrollers.getusers)
+router.post("/login", userscontrollers.login);
 
-router.post("/login" , userscontrollers.login )
+router.post(
+  "/signup",
+  [
+    check("name").not().isEmpty(),
+    check("email").normalizeEmail().isEmail,
+    check("password").isLength({min:6}),
+  ],
+  userscontrollers.signup
+); 
 
-router.post("/signup" , userscontrollers.signup )
-
-
-module.exports = router
+module.exports = router;
