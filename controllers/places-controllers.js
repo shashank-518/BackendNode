@@ -1,7 +1,7 @@
 const HttpError = require("../models/htttp-error")
 const { v4: uuidv4 } = require('uuid');
 const {validationResult} = require("express-validator")
-
+const getgeolocation  = require('../utils/geolocation')
 
 let DUMMY_VALUES = [
     {
@@ -69,17 +69,24 @@ const getPlacesbyUserId = (req,res,next)=>{
 
 }
 
-const createPlaces = (req,res,next)=>{
+const createPlaces = async (req,res,next)=>{
 
     const error = validationResult(req);
     if(!error.isEmpty()){
-      console.log(error)
-      throw new HttpError("Please Try again Pasiing the correct Input" , 422)
+      // console.log(error)
+      return next( new HttpError("Please Try again Pasiing the correct Input" , 422))
     }
 
-    const {title,address,descrption,coordinate,creator} = req.body;
+    const {title,address,descrption,creator} = req.body;
 
-    console.log(coordinate)
+    let coordinate;
+
+    try {
+      coordinate = await getgeolocation(address)
+    } catch (error) {
+      return next(error)
+    }
+
 
     const createdplace = {
       id: uuidv4(),
