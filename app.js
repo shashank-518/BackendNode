@@ -9,7 +9,6 @@ require("dotenv").config();
 const app = express();
 const mongodb = process.env.MONGODB_CON;
 
-console.log(mongodb);
 
 
 app.use(bodyParser.json());

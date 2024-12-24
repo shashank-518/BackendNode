@@ -2,6 +2,8 @@ const HttpError = require("../models/htttp-error")
 const { v4: uuidv4 } = require('uuid');
 const {validationResult} = require("express-validator")
 const getgeolocation  = require('../utils/geolocation')
+const Place = require('../models/place');
+
 
 let DUMMY_VALUES = [
     {
@@ -88,19 +90,23 @@ const createPlaces = async (req,res,next)=>{
     }
 
 
-    const createdplace = {
-      id: uuidv4(),
+    const createdplace = new Place({
       title,
-      address,
       descrption,
-      location :coordinate,
+      address,
+      location:coordinate,
+      imageURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8yfKNUZIfC9qe-Vz5SkVWSpPhDONel-ek-A&s",
       creator
-    }
+    })
 
     // console.log(createdplace)
 
-    DUMMY_VALUES.push(createdplace)
-
+    try{
+      createdplace.save()
+    }catch(e){
+      const error = new HttpError("An error has occured", 404)
+      next(error)
+    }
     res.status(201).json({place : createdplace})
 
 }
