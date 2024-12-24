@@ -97,7 +97,7 @@ const createPlaces = async (req,res,next)=>{
       creator
     }
 
-    console.log(createdplace)
+    // console.log(createdplace)
 
     DUMMY_VALUES.push(createdplace)
 
