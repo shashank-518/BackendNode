@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const {validationResult} = require("express-validator")
 const getgeolocation  = require('../utils/geolocation')
 const Place = require('../models/place');
+const place = require("../models/place");
 
 
 let DUMMY_VALUES = [
@@ -42,10 +43,17 @@ let DUMMY_VALUES = [
 
 
 
-const getPlacebyId = (req,res,next)=>{
+const getPlacebyId = async (req,res,next)=>{
     const id = req.params.pid;
 
-    const place = DUMMY_VALUES.find(p => id === p.id);
+    let place;
+
+    try{
+      place =  await Place.findById(id)
+    }catch(err){
+      const error = new HttpError("There Was an errror", 404)
+      next(error)
+    }
 
 
     if(!place){
@@ -53,21 +61,29 @@ const getPlacebyId = (req,res,next)=>{
     }
 
 
-    res.json({place})
+    res.json({place : place.toObject({getters: true})});
 
 }
 
-const getPlacesbyUserId = (req,res,next)=>{
+const getPlacesbyUserId = async (req,res,next)=>{
     const uid = req.params.uid;
 
-    const places = DUMMY_VALUES.filter(u=> uid === u.creator)
+    let places;
+
+    try {
+      places = await Place.find({creator : uid})
+    }
+    catch(err){
+      return next(new HttpError('There was an error', 404))
+      
+    }
 
     if(!places || places.length === 0 ){
         return next(new HttpError('Could not find the place with this UserId' , 404))
     }
 
 
-    res.json({places}) 
+    res.json({places : places.map(place => place.toObject({getters:true}))}) 
 
 }
 
@@ -112,7 +128,7 @@ const createPlaces = async (req,res,next)=>{
 }
 
 
-const updatePlace = (req,res,next)=>{
+const updatePlace = async (req,res,next)=>{
 
 
   const err = validationResult(req);
@@ -122,19 +138,34 @@ const updatePlace = (req,res,next)=>{
     throw new HttpError("Error Occured while updating Place", 422);
   }
 
-  const {title , descrption} = req.body;
+  const { title, descrption} = req.body;
   const uid = req.params.uid;
 
-  const updatedPlace = {...DUMMY_VALUES.find(p => p.id === uid)}
-  console.log(updatedPlace)
-  const placeIndex = DUMMY_VALUES.findIndex(p=>p.id === uid)
+
+
+  let updatedPlace;
+
+  try{
+    updatedPlace = await Place.findById(uid)
+  }
+  catch(err){
+    const error = new HttpError("Some Error in finding a place",404);
+    next(error)
+  }
+  
 
   updatedPlace.title = title;
   updatedPlace.descrption = descrption;
 
-  DUMMY_VALUES[placeIndex] = updatedPlace;
+  try{
+    await updatedPlace.save()
+  }catch(err){
+    const error = new HttpError("Some Error in updating a place a place",404);
+    next(error)
+  }
   
-  res.status(200).json({message:"Successfull"})
+  
+  res.status(200).json({place : updatedPlace.toObject({getters:true})})
   
 }
 
