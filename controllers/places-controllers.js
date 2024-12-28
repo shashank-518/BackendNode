@@ -1,5 +1,4 @@
 const HttpError = require("../models/htttp-error");
-const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const getgeolocation = require("../utils/geolocation");
 const Place = require("../models/place");
