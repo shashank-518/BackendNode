@@ -36,12 +36,13 @@ const signup = async (req, res, next) => {
         new HttpError('Invalid inputs passed, please check your data.', 422)
       );
     }
-    const { name, email, password, place } = req.body;
+    const { name, email, password} = req.body;
   
     let existingUser
     try {
       existingUser = await user.findOne({ email: email })
     } catch (err) {
+        console.log(err)
       const error = new HttpError(
         'Signing up failed, please try again later.',
         500
@@ -62,12 +63,13 @@ const signup = async (req, res, next) => {
       email,
       image: 'https://live.staticflickr.com/7631/26849088292_36fc52ee90_b.jpg',
       password,
-      place
+      place : []
     });
   
     try {
       await createdUser.save();
     } catch (err) {
+        console.log(err)
       const error = new HttpError(
         'Signing up failed, please try again.',
         500

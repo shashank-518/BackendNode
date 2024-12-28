@@ -3,7 +3,8 @@ const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const getgeolocation = require("../utils/geolocation");
 const Place = require("../models/place");
-const place = require("../models/place");
+const User = require("../models/user")
+const mongoose = require("mongoose")
 
 const getPlacebyId = async (req, res, next) => {
   const id = req.params.pid;
@@ -77,11 +78,31 @@ const createPlaces = async (req, res, next) => {
     creator,
   });
 
-  // console.log(createdplace)
+  let user;
+
+  try{
+    user = await User.findById(creator);
+  }catch (e) {
+    console.log(e)
+    const error = new HttpError("An error has occured", 404);
+    return next(error);
+  }
+
+  console.log(user)
+
+  if(!user){
+    return next(new HttpError("there is no creator id" , 404))
+  }
 
   try {
-    createdplace.save();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdplace.save({ session: sess})
+    user.place.push(createdplace)
+    await user.save({session : sess})
+    sess.commitTransaction();
   } catch (e) {
+    console.log(e)
     const error = new HttpError("An error has occured", 404);
     return next(error);
   }
@@ -127,14 +148,30 @@ const deletePlace = async (req, res, next) => {
   let place;
 
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(placeId).populate('creator');
+    console.log(place);
   } catch (e) {
+    console.log(e);
     const error = new HttpError("Something went Wrong in deleting", 404);
     return next(error);
   }
 
+  if(!place){
+    const err = new HttpError("Error has Been Occured" , 404)
+    return next(err)
+  }
+
+ 
+
+
+
   try{
-    await place.deleteOne();
+    const sess = await mongoose.startSession()
+    sess.startTransaction()
+    await place.deleteOne({seesion : sess});
+    place.creator.place.pull(place)
+    await place.creator.save({session:  sess})
+    sess.commitTransaction()
   }catch (e) {
     console.log(e);
     const error = new HttpError("Something went Wrong", 404);
