@@ -27,6 +27,8 @@ const signup = async (req, res, next) => {
       );
     }
     const { name, email, password} = req.body;
+
+    console.log('Request body:', req.body);
   
     let existingUser
     try {
@@ -74,6 +76,10 @@ const login = async(req,res,next)=>{
 
 
     const {email, password} = req.body;
+
+    console.log(email)
+    console.log(password)
+
 
     let existingUser
     try {
