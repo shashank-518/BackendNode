@@ -53,7 +53,7 @@ const signup = async (req, res, next) => {
     const createdUser = new user({
       name,
       email,
-      image: 'https://live.staticflickr.com/7631/26849088292_36fc52ee90_b.jpg',
+      image: 'https://cdn.pixabay.com/photo/2023/08/18/15/02/dog-8198719_1280.jpg',
       password,
       place : []
     });
@@ -83,6 +83,7 @@ const login = async(req,res,next)=>{
 
     let existingUser
     try {
+      
       existingUser = await user.findOne({ email: email })
     } catch (err) {
       const error = new HttpError(
