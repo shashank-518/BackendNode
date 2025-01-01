@@ -77,10 +77,6 @@ const login = async(req,res,next)=>{
 
     const {email, password} = req.body;
 
-    console.log(email)
-    console.log(password)
-
-
     let existingUser
     try {
       
@@ -97,7 +93,7 @@ const login = async(req,res,next)=>{
        return  next(new HttpError("The credentail are wrong please check and re-try later", 404))
     }
 
-    res.json({message : "Logged In"})
+    res.json({message : "Logged In" ,user: existingUser.toObject({ getters: true }) })
 
 }
 
