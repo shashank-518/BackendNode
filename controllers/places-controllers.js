@@ -13,6 +13,7 @@ const getPlacebyId = async (req, res, next) => {
   try {
     place = await Place.findById(id);
   } catch (err) {
+    console.log(err)
     const error = new HttpError("There Was an errror", 404);
     return next(error);
   }
@@ -34,6 +35,7 @@ const getPlacesbyUserId = async (req, res, next) => {
   try {
     places = await Place.find({ creator: uid });
   } catch (err) {
+    console.log(err);
     return next(new HttpError("There was an error", 404));
   }
 

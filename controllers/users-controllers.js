@@ -10,7 +10,7 @@ const getusers = async (req,res,next)=>{
     try{
         users = await user.find({} , '-password')
     }catch(e){
-        const err = HttpError("There is an error fetching your detail" , 404);
+        const err = new HttpError("There is an error fetching your detail" , 404);
         return next(err)
     }
 
