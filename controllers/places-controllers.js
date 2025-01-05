@@ -53,7 +53,6 @@ const getPlacesbyUserId = async (req, res, next) => {
 const createPlaces = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
-    // console.log(error)
     return next(
       new HttpError("Please Try again Pasiing the correct Input", 422)
     );
@@ -74,8 +73,7 @@ const createPlaces = async (req, res, next) => {
     descrption,
     address,
     location: coordinate,
-    imageURL:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8yfKNUZIfC9qe-Vz5SkVWSpPhDONel-ek-A&s",
+    image: req.file.path,
     creator,
   });
 
