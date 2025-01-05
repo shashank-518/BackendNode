@@ -5,6 +5,7 @@ const PlacesRoute = require("./Routes/places-routes");
 const UserRoute = require("./Routes/users-routes");
 const mongoose = require("mongoose");
 const fs = require("fs")
+const path = require('path')
 require("dotenv").config();
 
 const app = express();
@@ -13,6 +14,8 @@ const mongodb = process.env.MONGODB_CON;
 
 
 app.use(bodyParser.json());
+
+app.use('/uploads/images' , express.static( path.join('uploads' , 'images')))
 
 
 app.use((req, res, next) => {
