@@ -4,6 +4,7 @@ const HttpError = require("./models/htttp-error");
 const PlacesRoute = require("./Routes/places-routes");
 const UserRoute = require("./Routes/users-routes");
 const mongoose = require("mongoose");
+const fs = require("fs")
 require("dotenv").config();
 
 const app = express();
@@ -34,6 +35,13 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
+
+  if(req.file){
+    fs.unlink(req.file.path, (err)=>{
+      console.log(err);
+    })
+  }
+
   if (res.headerSent) {
     return next(error);
   }

@@ -33,6 +33,7 @@ const signup = async (req, res, next) => {
     try {
       existingUser = await user.findOne({ email: email })
     } catch (err) {
+      console.log(err);
       const error = new HttpError(
         'Signing up failed, please try again later.',
         500
@@ -51,7 +52,7 @@ const signup = async (req, res, next) => {
     const createdUser = new user({
       name,
       email,
-      image: 'https://cdn.pixabay.com/photo/2023/08/18/15/02/dog-8198719_1280.jpg',
+      image: req.file.path,
       password,
       place : []
     });
