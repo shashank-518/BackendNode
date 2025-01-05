@@ -13,7 +13,7 @@ const FileUpload = multer({
     limits:500000,
     storage: multer.diskStorage({
         destination:(req,file,cb)=>{
-            cb(null, 'uploads/images')
+            cb(null, './uploads/images')
         },
         filename:(req,file,cb)=>{
             const ext = MIME_TYPE_MAP[file.mimetype];
@@ -29,4 +29,4 @@ const FileUpload = multer({
 
 })
 
-export default FileUpload;
+module.exports = FileUpload;
