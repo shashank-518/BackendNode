@@ -1,6 +1,7 @@
 const HttpError = require('../models/htttp-error');
 const {validationResult} = require("express-validator")
 const user = require('../models/user');
+const bcrypt = require("bcryptjs")
 
 
 const getusers = async (req,res,next)=>{
@@ -28,6 +29,16 @@ const signup = async (req, res, next) => {
     }
     const { name, email, password} = req.body;
 
+    const hashedPassword;
+
+    try{
+      hashedPassword = await bcrypt.hash(password , 12)
+    }
+    catch(e){
+      const err = new HttpError("There Was an error creating new User",500)
+      next(err)
+    }
+
   
     let existingUser
     try {
@@ -53,7 +64,7 @@ const signup = async (req, res, next) => {
       name,
       email,
       image: req.file.path,
-      password,
+      password:hashedPassword,
       place : []
     });
   
@@ -87,8 +98,21 @@ const login = async(req,res,next)=>{
       return next(error);
     }
 
-    if(!existingUser || existingUser.password !== password){
+    if(!existingUser){
        return  next(new HttpError("The credentail are wrong please check and re-try later", 404))
+    }
+
+    let isPasswordValid = false;
+
+    try{
+      isPasswordValid = await bcrypt.compare(password,existingUser.password)
+    }catch(e){
+      const err = new HttpError("There Was an error logging you" , 500)
+      return next(err)
+    }
+    if(!isPasswordValid){
+      const err = new HttpError("Invalid Creditinals , could not log you in.",401)
+      return next(err)
     }
 
     res.json({message : "Logged In" ,user: existingUser.toObject({ getters: true }) })

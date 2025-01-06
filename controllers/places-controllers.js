@@ -6,6 +6,8 @@ const User = require("../models/user")
 const mongoose = require("mongoose")
 const fs = require("fs")
 
+
+
 const getPlacebyId = async (req, res, next) => {
   const id = req.params.pid;
 
@@ -175,7 +177,7 @@ const deletePlace = async (req, res, next) => {
     await place.creator.save({session:  sess})
     sess.commitTransaction()
   }catch (e) {
-    console.log(e);
+    // console.log(e);
     const error = new HttpError("Something went Wrong", 404);
     return next(error);
   }
