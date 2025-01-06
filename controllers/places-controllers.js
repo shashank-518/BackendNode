@@ -4,6 +4,7 @@ const getgeolocation = require("../utils/geolocation");
 const Place = require("../models/place");
 const User = require("../models/user")
 const mongoose = require("mongoose")
+const fs = require("fs")
 
 const getPlacebyId = async (req, res, next) => {
   const id = req.params.pid;
@@ -146,6 +147,7 @@ const deletePlace = async (req, res, next) => {
 
   let place;
 
+  
   try {
     place = await Place.findById(placeId).populate('creator');
     console.log(place);
@@ -159,9 +161,10 @@ const deletePlace = async (req, res, next) => {
     const err = new HttpError("Error has Been Occured" , 404)
     return next(err)
   }
-
- 
-
+  
+  
+  
+  const placeImage = place.image;
 
 
   try{
@@ -176,6 +179,10 @@ const deletePlace = async (req, res, next) => {
     const error = new HttpError("Something went Wrong", 404);
     return next(error);
   }
+
+  fs.unlink(placeImage , err => {
+    console.log(err);
+  })
 
   res.status(200).json({ message: "Deleted Place" });
 };
