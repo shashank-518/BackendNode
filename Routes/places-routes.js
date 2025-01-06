@@ -2,7 +2,7 @@ const exprees = require("express");
 const { check } = require("express-validator");
 const placescontrollers = require("../controllers/places-controllers");
 const FileUpload = require("../middlewares/File-upload")
-
+const checkAuth = require("../middlewares/check-auth")
 const router = exprees.Router();
 
 router.get("/", (req, res, next) => {
@@ -13,6 +13,8 @@ router.get("/", (req, res, next) => {
 router.get("/:pid", placescontrollers.getPlacebyId);
 
 router.get("/user/:uid", placescontrollers.getPlacesbyUserId);
+
+router.use(checkAuth);
 
 router.post(
   "/",
