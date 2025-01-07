@@ -5,6 +5,11 @@ require("dotenv").config();
 const PRIVATE_KEY = process.env.TOKEN_PRIVATE;
 
 module.exports = (req,res,next)=>{
+
+    if(req.methods === 'OPTIONS'){
+        next()
+    }
+
     try{
         const token = req.headers.authorization(' ')[1];
         if(!token){

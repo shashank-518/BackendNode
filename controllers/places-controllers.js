@@ -35,6 +35,8 @@ const getPlacesbyUserId = async (req, res, next) => {
 
   let places;
 
+  
+
   try {
     places = await Place.find({ creator: uid });
   } catch (err) {
